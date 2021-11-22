@@ -1,0 +1,47 @@
+[
+  {
+    "stylers": [
+      {
+        "visibility": "simplified"
+      },
+      {
+        "weight": 7
+      }
+    ]
+  },
+  {
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "visibility": "simplified"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text",
+    "stylers": [
+      {
+        "visibility": "on"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape.man_made",
+    "stylers": [
+      {
+        "visibility": "simplified"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "stylers": [
+      {
+        "color": "#000000"
+      },
+      {
+        "visibility": "simplified"
+      }
+    ]
+  }
+]
