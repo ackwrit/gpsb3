@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,6 +57,44 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
  CameraPosition positionActuelle = const CameraPosition(target: LatLng(48.858370,2.294481),zoom: 13);
  Completer <GoogleMapController> controller = Completer();
+  Position? maPosition;
+
+ Future<Position> determinePosition() async {
+   bool serviceEnabled;
+   LocationPermission permission;
+   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+   if (!serviceEnabled) {
+     return Future.error('Location services are disabled.');
+   }
+   permission = await Geolocator.checkPermission();
+   if (permission == LocationPermission.denied) {
+     permission = await Geolocator.requestPermission();
+     if (permission == LocationPermission.denied) {
+
+       return Future.error('Location permissions are denied');
+     }
+   }
+
+   if (permission == LocationPermission.deniedForever) {
+     // Permissions are denied forever, handle appropriately.
+     return Future.error(
+         'Location permissions are permanently denied, we cannot request permissions.');
+   }
+   return await Geolocator.getCurrentPosition();
+ }
+
+
+ @override
+ void initState() {
+    // TODO: implement initState
+    super.initState();
+    determinePosition().then((value){
+      setState(() {
+        maPosition = value;
+      });
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+    print(maPosition!.latitude);
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
